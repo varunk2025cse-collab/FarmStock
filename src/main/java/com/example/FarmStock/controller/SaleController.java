@@ -45,9 +45,16 @@ public class SaleController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Sale> getSaleById(@PathVariable Long id) {
+    public ResponseEntity<?> getSaleById(@PathVariable Long id) {
 
         Sale sale = saleService.getSaleById(id);
+
+        if (sale == null) {
+            return new ResponseEntity<>(
+                    "Sale not found with id: " + id,
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
         return new ResponseEntity<>(sale, HttpStatus.OK);
     }

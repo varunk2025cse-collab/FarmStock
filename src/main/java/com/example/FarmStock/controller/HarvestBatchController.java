@@ -38,11 +38,18 @@ public class HarvestBatchController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<HarvestBatch> getHarvestBatchById(
+    public ResponseEntity<?> getHarvestBatchById(
             @PathVariable Long id) {
 
         HarvestBatch batch =
                 harvestBatchService.getHarvestBatchById(id);
+
+        if (batch == null) {
+            return new ResponseEntity<>(
+                    "Harvest batch not found with id: " + id,
+                    HttpStatus.NOT_FOUND
+            );
+        }
 
         return new ResponseEntity<>(batch, HttpStatus.OK);
     }

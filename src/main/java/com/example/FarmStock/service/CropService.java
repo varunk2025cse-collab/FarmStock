@@ -24,7 +24,8 @@ public class CropService {
     }
 
     public Crop getCropById(Long id) {
+        // returns null when the crop is not in the database
         return cropRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Crop not found with id: " + id));
+                .orElse(null);
     }
 }

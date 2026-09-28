@@ -41,9 +41,9 @@ public class SaleService {
     }
 
     public Sale getSaleById(Long id) {
+        // returns null when the sale is not in the database
         return saleRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Sale not found with id: " + id));
+                .orElse(null);
     }
 
     public Double getCurrentStock(Long cropId) {

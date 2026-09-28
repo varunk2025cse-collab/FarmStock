@@ -24,8 +24,8 @@ public class HarvestBatchService {
     }
 
     public HarvestBatch getHarvestBatchById(Long id) {
+        // returns null when the harvest batch is not in the database
         return harvestBatchRepository.findById(id)
-                .orElseThrow(() ->
-                        new RuntimeException("Harvest batch not found with id: " + id));
+                .orElse(null);
     }
 }
