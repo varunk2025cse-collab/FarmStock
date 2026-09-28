@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<!-- Navigation bar shared by every page -->
+<nav th:fragment="nav" class="navbar">
+    <div class="brand">FarmStock</div>
+    <ul class="nav-links">
+        <li><a th:href="@{/}">Dashboard</a></li>
+        <li><a th:href="@{/crops}">Crops</a></li>
+        <li><a th:href="@{/harvests}">Harvests</a></li>
+        <li><a th:href="@{/sales}">Sales</a></li>
+        <li><a th:href="@{/stock}">Stock</a></li>
+        <li><a th:href="@{/revenue}">Revenue</a></li>
+    </ul>
+</nav>
+
+</body>
+</html>

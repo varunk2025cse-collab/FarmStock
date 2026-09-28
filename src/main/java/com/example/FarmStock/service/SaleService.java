@@ -83,4 +83,49 @@ public class SaleService {
 
         return totalRevenue;
     }
+
+    // ---------- Totals for the dashboard (all crops) ----------
+
+    public Double getTotalHarvested() {
+
+        List<HarvestBatch> harvestBatches = harvestBatchRepository.findAll();
+
+        double totalHarvested = 0;
+
+        for (HarvestBatch batch : harvestBatches) {
+            totalHarvested += batch.getQuantity();
+        }
+
+        return totalHarvested;
+    }
+
+    public Double getTotalSold() {
+
+        List<Sale> sales = saleRepository.findAll();
+
+        double totalSold = 0;
+
+        for (Sale sale : sales) {
+            totalSold += sale.getQuantity();
+        }
+
+        return totalSold;
+    }
+
+    public Double getTotalStock() {
+        return getTotalHarvested() - getTotalSold();
+    }
+
+    public Double getTotalRevenueOfAllSales() {
+
+        List<Sale> sales = saleRepository.findAll();
+
+        double totalRevenue = 0;
+
+        for (Sale sale : sales) {
+            totalRevenue += sale.getQuantity() * sale.getPricePerUnit();
+        }
+
+        return totalRevenue;
+    }
 }
