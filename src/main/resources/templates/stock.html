@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmStock - Stock</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1>Current Stock</h1>
+    <p>Current Stock = Total Harvested - Total Sold</p>
+
+    <p class="empty" th:if="${#maps.isEmpty(stockMap)}">No crops added yet.</p>
+
+    <div class="table-box" th:unless="${#maps.isEmpty(stockMap)}">
+        <table>
+            <thead>
+            <tr>
+                <th>Crop</th>
+                <th>Category</th>
+                <th>Current Stock (kg)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="entry : ${stockMap}">
+                <td th:text="${entry.key.name}"></td>
+                <td th:text="${entry.key.category}"></td>
+                <td th:text="${entry.value}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
