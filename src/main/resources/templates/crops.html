@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmStock - Crops</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1>Crops</h1>
+
+    <div class="message error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <!-- Add crop form -->
+    <div class="form-box">
+        <h2>Add Crop</h2>
+        <form th:action="@{/crops}" method="post">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="name">Crop Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" required>
+                </div>
+                <div>
+                    <button type="submit" class="btn">Save Crop</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Crops table -->
+    <h2>All Crops</h2>
+    <p class="empty" th:if="${#lists.isEmpty(crops)}">No crops added yet.</p>
+
+    <div class="table-box" th:unless="${#lists.isEmpty(crops)}">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Crop Name</th>
+                <th>Category</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="crop : ${crops}">
+                <td th:text="${crop.id}"></td>
+                <td th:text="${crop.name}"></td>
+                <td th:text="${crop.category}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
