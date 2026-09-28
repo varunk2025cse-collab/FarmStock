@@ -5,11 +5,13 @@ import com.example.FarmStock.model.Sale;
 import com.example.FarmStock.service.CropService;
 import com.example.FarmStock.service.SaleService;
 import jakarta.validation.Valid;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -97,5 +99,32 @@ public class SaleController {
         Double currentStock = saleService.getCurrentStock(cropId);
 
         return new ResponseEntity<>(currentStock, HttpStatus.OK);
+    }
+
+    @GetMapping("/revenue/{cropId}")
+    public ResponseEntity<?> getTotalRevenue(
+            @PathVariable Long cropId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate from,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate to) {
+
+        Crop crop = cropService.getCropById(cropId);
+
+        if (crop == null) {
+            return new ResponseEntity<>(
+                    "Crop not found with id: " + cropId,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+
+        if (from.isAfter(to)) {
+            return new ResponseEntity<>(
+                    "From date must be before To date",
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        Double totalRevenue = saleService.getTotalRevenue(cropId, from, to);
+
+        return new ResponseEntity<>(totalRevenue, HttpStatus.OK);
     }
 }

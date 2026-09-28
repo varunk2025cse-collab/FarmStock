@@ -6,6 +6,7 @@ import com.example.FarmStock.repository.HarvestBatchRepository;
 import com.example.FarmStock.repository.SaleRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -66,5 +67,20 @@ public class SaleService {
         }
 
         return totalHarvested - totalSold;
+    }
+
+    public Double getTotalRevenue(Long cropId, LocalDate from, LocalDate to) {
+
+        List<Sale> sales =
+                saleRepository.findByCropIdAndSaleDateBetween(cropId, from, to);
+
+        double totalRevenue = 0;
+
+        // Revenue = quantity x price per unit
+        for (Sale sale : sales) {
+            totalRevenue += sale.getQuantity() * sale.getPricePerUnit();
+        }
+
+        return totalRevenue;
     }
 }
