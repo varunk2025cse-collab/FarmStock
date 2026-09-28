@@ -84,6 +84,24 @@ public class SaleService {
         return totalRevenue;
     }
 
+    public List<Sale> getSalesBetween(Long cropId, LocalDate from, LocalDate to) {
+        return saleRepository.findByCropIdAndSaleDateBetween(cropId, from, to);
+    }
+
+    public Double getTotalQuantitySold(Long cropId, LocalDate from, LocalDate to) {
+
+        List<Sale> sales =
+                saleRepository.findByCropIdAndSaleDateBetween(cropId, from, to);
+
+        double totalQuantity = 0;
+
+        for (Sale sale : sales) {
+            totalQuantity += sale.getQuantity();
+        }
+
+        return totalQuantity;
+    }
+
     // ---------- Totals for the dashboard (all crops) ----------
 
     public Double getTotalHarvested() {
