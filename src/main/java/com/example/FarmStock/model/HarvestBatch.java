@@ -21,6 +21,7 @@ public class HarvestBatch {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Crop is required")
     @ManyToOne
     @JoinColumn(name = "crop_id", nullable = false)
     private Crop crop;

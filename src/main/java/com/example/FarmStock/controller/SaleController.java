@@ -1,9 +1,13 @@
 package com.example.FarmStock.controller;
 
+import com.example.FarmStock.model.Crop;
 import com.example.FarmStock.model.Sale;
+import com.example.FarmStock.service.CropService;
 import com.example.FarmStock.service.SaleService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,13 +17,40 @@ import java.util.List;
 public class SaleController {
 
     private final SaleService saleService;
+    private final CropService cropService;
 
-    public SaleController(SaleService saleService) {
+    public SaleController(SaleService saleService, CropService cropService) {
         this.saleService = saleService;
+        this.cropService = cropService;
     }
 
     @PostMapping
-    public ResponseEntity<?> createSale(@RequestBody Sale sale) {
+    public ResponseEntity<?> createSale(@Valid @RequestBody Sale sale,
+                                        BindingResult result) {
+
+        // If validation fails, send the first error message back
+        if (result.hasErrors()) {
+            return new ResponseEntity<>(
+                    result.getFieldError().getDefaultMessage(),
+                    HttpStatus.BAD_REQUEST
+            );
+        }
+
+        // Check that the crop really exists in the database
+        Long cropId = sale.getCrop().getId();
+        Crop crop = null;
+        if (cropId != null) {
+            crop = cropService.getCropById(cropId);
+        }
+
+        if (crop == null) {
+            return new ResponseEntity<>(
+                    "Crop not found with id: " + cropId,
+                    HttpStatus.NOT_FOUND
+            );
+        }
+
+        sale.setCrop(crop);
 
         Sale savedSale = saleService.saveSale(sale);
 
