@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FarmStock - Harvests</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div th:replace="~{fragments/nav :: nav}"></div>
+
+<main class="container">
+    <h1>Harvests</h1>
+
+    <div class="message error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+    <!-- Record harvest form -->
+    <div class="form-box">
+        <h2>Record Harvest</h2>
+
+        <p class="empty" th:if="${#lists.isEmpty(crops)}">
+            Please add a crop first on the Crops page.
+        </p>
+
+        <form th:action="@{/harvests}" method="post" th:unless="${#lists.isEmpty(crops)}">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="crop">Crop</label>
+                    <!-- Crop list comes from the database -->
+                    <select id="crop" name="crop.id" required>
+                        <option value="">-- Select crop --</option>
+                        <option th:each="crop : ${crops}"
+                                th:value="${crop.id}"
+                                th:text="${crop.name}">
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="quantity">Quantity (kg)</label>
+                    <input type="number" id="quantity" name="quantity" step="0.01" min="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="harvestDate">Harvest Date</label>
+                    <input type="date" id="harvestDate" name="harvestDate" required>
+                </div>
+                <div>
+                    <button type="submit" class="btn">Save Harvest</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Harvest records table -->
+    <h2>All Harvest Records</h2>
+    <p class="empty" th:if="${#lists.isEmpty(harvestBatches)}">No harvests recorded yet.</p>
+
+    <div class="table-box" th:unless="${#lists.isEmpty(harvestBatches)}">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Crop</th>
+                <th>Quantity (kg)</th>
+                <th>Harvest Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="batch : ${harvestBatches}">
+                <td th:text="${batch.id}"></td>
+                <td th:text="${batch.crop.name}"></td>
+                <td th:text="${batch.quantity}"></td>
+                <td th:text="${batch.harvestDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+
+</body>
+</html>
